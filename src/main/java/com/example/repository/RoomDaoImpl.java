@@ -13,7 +13,7 @@ public class RoomDaoImpl implements RoomDaoCustom {
 
     @Override
     public List<Light> findOnLightsInRoom(Integer ID) {
-        String jpql = "select lt from Light lt join lt.room r where  r.ID = :ID";
+        String jpql = "select lt from Light lt join lt.room r where  r.id = :ID";
         return em.createQuery(jpql, Light.class)
                 .setParameter("ID", ID)
                 .getResultList();

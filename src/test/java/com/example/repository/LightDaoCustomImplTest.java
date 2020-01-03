@@ -19,8 +19,11 @@ public class LightDaoCustomImplTest {
     @Test
     public void shouldFindOnLights() {
         Assertions.assertThat(lightDao.findOnLights())
-                .hasSize(1)
+                .hasSize(2)
                 .extracting("id", "status")
-                .containsExactly(Tuple.tuple(-1L, Status.ON));
+                .containsExactlyInAnyOrder(
+                        Tuple.tuple(3, Status.ON),
+                        Tuple.tuple(1, Status.ON)
+                );
     }
 }

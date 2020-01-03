@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.hello;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,17 +14,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class DummyUserServiceTest {
 
     @Configuration // 2
-    @ComponentScan("com.emse.spring.faircorp.hello")
+    @ComponentScan("com.example.hello")
     public static class DummyUserServiceTestConfig{}
-
     @Autowired // 3
     public DummyUserService dummyUserService;
 
 
     @Test
-    public void testGreetingAll(CapturedOutput output) {
-        dummyUserService.greetAll();
-        Assertions.assertThat(output.getAll()).contains("Hello, Elodie!", "Hello, Elodie!");
-
-    }
+        public void testGreetingAll(CapturedOutput output) {
+            dummyUserService.greetAll();
+            Assertions.assertThat(output).contains("Hello, Elodie!", "Hello, Charles!");
+        }
 }

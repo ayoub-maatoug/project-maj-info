@@ -1,6 +1,8 @@
 package com.example.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -9,7 +11,7 @@ public class Light {
 
     @Id// 2.
     @GeneratedValue
-    private Long id;
+    private Integer id;
 
     @NotNull // 3.
     private Integer level;
@@ -20,6 +22,7 @@ public class Light {
 
 
     @ManyToOne(optional =false)
+    @JsonBackReference
     private Room room;
     public Light() {
     }
@@ -29,11 +32,11 @@ public class Light {
         this.room=room;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -51,5 +54,13 @@ public class Light {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
     }
 }

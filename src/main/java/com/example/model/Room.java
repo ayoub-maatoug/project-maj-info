@@ -11,16 +11,14 @@ import java.util.List;
 public class Room {
     @Id// 2.
     @GeneratedValue
-    private Long id;
-
-
-
+    private Integer id;
     @NotNull
     private String name;
 
     @NotNull
     private Integer floor;
     @OneToMany(mappedBy = "room")
+    @JsonManagedReference
     private List<Light> lights;
 
     public Room( String name, Integer floor) {
@@ -30,11 +28,11 @@ public class Room {
     public Room() {
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
