@@ -1,6 +1,6 @@
 package com.example;
 
-import com.example.hello.GreetingService;
+import com.example.Service.GreetingService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

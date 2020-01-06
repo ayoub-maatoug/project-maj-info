@@ -4,6 +4,10 @@ import com.example.model.Light;
 import com.example.model.Status;
 import com.example.repository.LightDao;
 import com.example.repository.RoomDao;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +41,19 @@ public class LightController {
     }
 
     @PutMapping(path = "/{id}/switch")
-    public List<RoomDto> switchStatus(@PathVariable Integer id) {
+    public List<RoomDto> switchStatus(@PathVariable Integer id) throws MqttException {
+        // publish
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        MqttClient publisher = new MqttClient("tcp://max.isasecret.com:1723","1");
+        MqttConnectOptions options = new MqttConnectOptions();
+        MqttMessage msg = new MqttMessage();
+        options.setUserName("majinfo2019");
+        options.setPassword("Y@_oK2".toCharArray());
+        publisher.connect(options);
+        if (publisher.isConnected()) {
+            publisher.publish("switchLight",msg);
+        }
         light.setStatus(light.getStatus() == Status.ON ? Status.OFF: Status.ON);
         return roomDao.findAll()
                 .stream()
