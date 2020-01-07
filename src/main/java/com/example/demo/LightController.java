@@ -15,6 +15,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.Integer.sum;
+
 @CrossOrigin
 @RestController  // 1.
 @RequestMapping("/api/lights") // 2.
@@ -44,16 +46,30 @@ public class LightController {
     public List<RoomDto> switchStatus(@PathVariable Integer id) throws MqttException {
         // publish
         Light light = lightDao.findById(id).orElseThrow(IllegalArgumentException::new);
-
+        Integer payload= sum(id,10);
         MqttClient publisher = new MqttClient("tcp://max.isasecret.com:1723","1");
         MqttConnectOptions options = new MqttConnectOptions();
         MqttMessage msg = new MqttMessage();
+        msg.setPayload((payload.toString()+":"+(light.getStatus() == Status.ON ? Status.OFF: Status.ON).toString()).getBytes());
         options.setUserName("majinfo2019");
         options.setPassword("Y@_oK2".toCharArray());
         publisher.connect(options);
         if (publisher.isConnected()) {
-            publisher.publish("switchLight",msg);
+            System.out.println("client connected ");
+            publisher.publish("SwitchLight",msg);
         }
+        /*
+        MqttClient publisher1 = new MqttClient("tcp://max.isasecret.com:1723","1");
+        MqttConnectOptions options1 = new MqttConnectOptions();
+        MqttMessage msg1 = new MqttMessage();
+        msg1.setPayload((light.getStatus() == Status.ON ? Status.OFF: Status.ON).toString().getBytes());
+        options1.setUserName("majinfo2019");
+        options1.setPassword("Y@_oK2".toCharArray());
+        publisher1.connect(options);
+        if (publisher1.isConnected()) {
+            System.out.println("client connected ");
+            publisher1.publish("Status",msg);
+        }*/
         light.setStatus(light.getStatus() == Status.ON ? Status.OFF: Status.ON);
         return roomDao.findAll()
                 .stream()
